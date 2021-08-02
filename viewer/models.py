@@ -1,10 +1,6 @@
 from django.db import models
 
-class Keyword(models.model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    keyword = models.TextField()
-
-class NutritionalInfo(models.model):
+class NutritionalInfo(models.Model):
     calories = models.TextField()
     carbohydrateContent = models.TextField()
     cholesterolContent = models.TextField()
@@ -19,18 +15,18 @@ class NutritionalInfo(models.model):
     unsaturatedFatContent = models.TextField()
 
 # Create your models here.
-class Recipe(models.model):
+class Recipe(models.Model):
     
     webAddress = models.URLField()
     name = models.TextField()
     description = models.TextField()
-    image = models.models.URLField()
+    image = models.URLField()
 
     author = models.TextField()
-    datePublished = models.models.DateField()
+    datePublished = models.DateField()
     publisher = models.TextField()
 
-    estimatedCost = models.DecimalField()
+    estimatedCost = models.DecimalField(max_digits = 5, decimal_places = 2)
     prepTime = models.DurationField()
     totalTime = models.DurationField()
 
@@ -43,4 +39,6 @@ class Recipe(models.model):
     recipeInstructions = models.TextField()
     suitableForDiet = models.TextField() # need to process enums for storage
 
-    # keywords = models.ForeignKey() probably not needed
+class Keyword(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    keyword = models.TextField()
