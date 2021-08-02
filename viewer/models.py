@@ -2,10 +2,21 @@ from django.db import models
 
 class Keyword(models.model):
     recipe = models.ForeignKey()
+    keyword = models.TextField()
 
 class NutritionalInfo(models.model):
-    calories = models.IntegerField()
-
+    calories = models.TextField()
+    carbohydrateContent = models.TextField()
+    cholesterolContent = models.TextField()
+    fatContent = models.TextField()
+    fiberContent = models.TextField()
+    proteinContent = models.TextField()
+    saturatedFatContent = models.TextField()
+    servingSize = models.TextField()
+    sodiumContent = models.TextField()
+    sugarContent = models.TextField()
+    transFatContent = models.TextField()
+    unsaturatedFatContent = models.TextField()
 
 # Create your models here.
 class Recipe(models.model):
