@@ -1,7 +1,7 @@
 from django.db import models
 
 class Keyword(models.model):
-    recipe = models.ForeignKey()
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     keyword = models.TextField()
 
 class NutritionalInfo(models.model):
@@ -36,7 +36,7 @@ class Recipe(models.model):
 
     cookTime = models.DurationField()
     cookingMethod = models.TextField()
-    nutrition = models.ForeignKey(NutritionalInfo)
+    nutrition = models.ForeignKey(NutritionalInfo, on_delete=models.CASCADE)
     recipeCategory = models.TextField()
     recipeCuisine = models.TextField()
     recipeIngredient = models.TextField() # may cause issues later, have to check
