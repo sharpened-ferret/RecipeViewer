@@ -11,3 +11,8 @@ def recipe(request):
     template = loader.get_template('viewer/index.html')
     context = {}
     return render(request, 'viewer/index.html', context)
+
+def addRecipe(request):
+    template = loader.get_template('viewer/addRecipe.html')
+    context = {}
+    return render(request, 'viewer/addRecipe.html', context)
