@@ -39,6 +39,8 @@ class Recipe(models.Model):
     recipeInstructions = models.TextField()
     suitableForDiet = models.TextField() # need to process enums for storage
 
+    dateSaved = models.DateTimeField()
+
 class Keyword(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     keyword = models.TextField()
