@@ -8,6 +8,12 @@
     </head>
     <body>
         <h1>Add recipe</h1>
-        <p>Text</p>
+        <p>Submit a recipe's URL to save it to the database.</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            {% comment %} <input type="text" name="URL" required=""> {% endcomment %}
+            <button type="submit">Submit</button>
+        </form>
     </body>
 </html>
