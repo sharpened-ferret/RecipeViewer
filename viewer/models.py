@@ -17,19 +17,23 @@ class NutritionalInfo(models.Model):
 # Create your models here.
 class Recipe(models.Model):
     
+     # From Thing schema
     webAddress = models.URLField()
     name = models.TextField()
     description = models.TextField()
     image = models.URLField()
 
+     # From Creative Work schema
     author = models.TextField()
     datePublished = models.DateField()
     publisher = models.TextField()
 
+     # From How To schema
     estimatedCost = models.DecimalField(max_digits = 5, decimal_places = 2)
     prepTime = models.DurationField()
     totalTime = models.DurationField()
 
+     # From Recipe schema
     cookTime = models.DurationField()
     cookingMethod = models.TextField()
     nutrition = models.ForeignKey(NutritionalInfo, on_delete=models.CASCADE)
