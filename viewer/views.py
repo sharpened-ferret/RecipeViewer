@@ -69,6 +69,11 @@ def addRecipe(request):
                     suitableForDiet = None
 
                 dateSaved = timezone.now()
+
+                if 'keywords' in recipe:
+                    keywords = recipe['keywords']
+                else:
+                    keywords = None
             else:
                 print("No recipes found")
 
