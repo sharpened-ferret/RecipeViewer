@@ -7,7 +7,7 @@ from dateutil.parser import *
 
 from scrape_schema_recipe import scrape_url
 
-from .models import Recipe
+from .models import Recipe, NutritionalInfo
 from .forms import AddRecipeForm
 
 def index(request):
@@ -19,7 +19,6 @@ def recipe(request):
 
 def addRecipe(request):
     
-
     if request.method == 'POST':
         form = AddRecipeForm(request.POST)
         
@@ -137,6 +136,75 @@ def addRecipe(request):
 
                 dateSaved = timezone.now()
 
+
+
+                # Nutritional Info Handling (Where exists)
+                if 'nutrition' in recipe:
+                    if 'calories' in recipe['nutrition']:
+                        calories = recipe['nutrition']['calories']
+                    else:
+                        calories = None
+                    if 'carbohydrateContent' in recipe['nutrition']:
+                        carbohydrateContent = recipe['nutrition']['carbohydrateContent']
+                    else:
+                        carbohydrateContent = None
+                    if 'cholesterolContent' in recipe['nutrition']:
+                        cholesterolContent = recipe['nutrition']['cholesterolContent']
+                    else:
+                        cholesterolContent = None
+                    if 'fatContent' in recipe['nutrition']:
+                        fatContent = recipe['nutrition']['fatContent']
+                    else:
+                        fatContent = None
+                    if 'fiberContent' in recipe['nutrition']:
+                        fiberContent = recipe['nutrition']['fiberContent']
+                    else:
+                        fiberContent = None
+                    if 'proteinContent' in recipe['nutrition']:
+                        proteinContent = recipe['nutrition']['proteinContent']
+                    else:
+                        proteinContent = None
+                    if 'saturatedFatContent' in recipe['nutrition']:
+                        saturatedFatContent = recipe['nutrition']['saturatedFatContent']
+                    else:
+                        saturatedFatContent = None
+                    if 'servingSize' in recipe['nutrition']:
+                        servingSize = recipe['nutrition']['servingSize']
+                    else:
+                        servingSize = None
+                    if 'sodiumContent' in recipe['nutrition']:
+                        sodiumContent = recipe['nutrition']['sodiumContent']
+                    else:
+                        sodiumContent = None
+                    if 'sugarContent' in recipe['nutrition']:
+                        sugarContent = recipe['nutrition']['sugarContent']
+                    else:
+                        sugarContent = None
+                    if 'transFatContent' in recipe['nutrition']:
+                        transFatContent = recipe['nutrition']['transFatContent']
+                    else:
+                        transFatContent = None
+                    if 'unsaturatedFatContent' in recipe['nutrition']:
+                        unsaturatedFatContent = recipe['nutrition']['unsaturatedFatContent']
+                    else:
+                        unsaturatedFatContent = None
+                    
+                    
+                    n = NutritionalInfo(
+                        calories = calories,
+                        carbohydrateContent = carbohydrateContent,
+                        cholesterolContent = cholesterolContent,
+                        fatContent = fatContent,
+                        fiberContent = fiberContent,
+                        proteinContent = proteinContent,
+                        saturatedFatContent = saturatedFatContent,
+                        servingSize = servingSize,
+                        sodiumContent = sodiumContent,
+                        sugarContent = sugarContent,
+                        transFatContent = transFatContent,
+                        unsaturatedFatContent = unsaturatedFatContent
+                    )
+                    n.save()
             
                 r = Recipe(
                     webAddress = webAddress,
@@ -151,7 +219,7 @@ def addRecipe(request):
                     totalTime = totalTime,
                     cookTime = cookTime,
                     cookingMethod = cookingMethod,
-                    #nutrition = nutrition,
+                    nutrition = n,
                     recipeCategory = recipeCategory,
                     recipeCuisine = recipeCuisine,
                     recipeIngredient = recipeIngredient,
