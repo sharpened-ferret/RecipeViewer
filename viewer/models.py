@@ -16,6 +16,8 @@ class NutritionalInfo(models.Model):
 
 # Create your models here.
 class Recipe(models.Model):
+    def __str__(self):
+        return self.name + " recipe"
     
      # From Thing schema
     webAddress = models.URLField()
