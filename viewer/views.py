@@ -69,7 +69,10 @@ def addRecipe(request):
                 else:
                     datePublished = None
                 if 'publisher' in recipe:
-                    publisher = recipe['publisher']
+                    if 'name' in recipe['publisher']:
+                        publisher = recipe['publisher']['name']
+                    else:
+                        publisher = recipe['publisher']
                 else:
                     publisher = None
 
@@ -109,7 +112,24 @@ def addRecipe(request):
                 else:
                     recipeCuisine = None
                 recipeIngredient = recipe['recipeIngredient']
-                recipeInstructions = recipe['recipeInstructions']
+                if isinstance(recipe['recipeInstructions'], list):
+                    if '@type' in recipe['recipeInstructions'][0]:
+                        outputText = "<ol>"
+                        for x in range(0, len(recipe['recipeInstructions'])):
+                            currentStep = x
+                            outputText += "<li>" + recipe['recipeInstructions'][x]['text'] + "</li>"
+                        outputText += "</ol>"
+                        recipeInstructions = outputText
+                    elif len(recipe['recipeInstructions']) > 1:
+                        outputText = "<ol>"
+                        for howToStep in recipe['recipeInstructions']:
+                            outputText += "<li>" + recipe['recipeInstructions'][howToStep]['text'] + "</li>"
+                        outputText += "</ol>"
+                        recipeInstructions = outputText
+                    else:
+                        recipeInstructions = "<p>" + recipe['recipeInstructions'][0] + "</p>"
+                else:
+                    recipeInstructions = recipe['recipeInstructions']
                 if 'suitableForDiet' in recipe:
                     suitableForDiet = recipe['suitableForDiet']
                 else:
