@@ -1,19 +1,5 @@
 from django.db import models
 
-class NutritionalInfo(models.Model):
-    calories = models.TextField(blank=True, null=True)
-    carbohydrateContent = models.TextField(blank=True, null=True)
-    cholesterolContent = models.TextField(blank=True, null=True)
-    fatContent = models.TextField(blank=True, null=True)
-    fiberContent = models.TextField(blank=True, null=True)
-    proteinContent = models.TextField(blank=True, null=True)
-    saturatedFatContent = models.TextField(blank=True, null=True)
-    servingSize = models.TextField(blank=True, null=True)
-    sodiumContent = models.TextField(blank=True, null=True)
-    sugarContent = models.TextField(blank=True, null=True)
-    transFatContent = models.TextField(blank=True, null=True)
-    unsaturatedFatContent = models.TextField(blank=True, null=True)
-
 # Create your models here.
 class Recipe(models.Model):
     def __str__(self):
@@ -38,7 +24,6 @@ class Recipe(models.Model):
      # From Recipe schema
     cookTime = models.DurationField(blank=True, null=True)
     cookingMethod = models.TextField(blank=True, null=True)
-    nutrition = models.ForeignKey(NutritionalInfo, on_delete=models.CASCADE, blank=True, null=True)
     recipeCategory = models.TextField(blank=True, null=True)
     recipeCuisine = models.TextField(blank=True, null=True)
     recipeIngredient = models.TextField() # may cause issues later, have to check
@@ -46,6 +31,24 @@ class Recipe(models.Model):
     suitableForDiet = models.TextField(blank=True, null=True) # need to process enums for storage
 
     dateSaved = models.DateTimeField()
+
+class NutritionalInfo(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    calories = models.TextField(blank=True, null=True)
+    carbohydrateContent = models.TextField(blank=True, null=True)
+    cholesterolContent = models.TextField(blank=True, null=True)
+    fatContent = models.TextField(blank=True, null=True)
+    fiberContent = models.TextField(blank=True, null=True)
+    proteinContent = models.TextField(blank=True, null=True)
+    saturatedFatContent = models.TextField(blank=True, null=True)
+    servingSize = models.TextField(blank=True, null=True)
+    sodiumContent = models.TextField(blank=True, null=True)
+    sugarContent = models.TextField(blank=True, null=True)
+    transFatContent = models.TextField(blank=True, null=True)
+    unsaturatedFatContent = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.recipe.name + " nutritional info"
 
 class Keyword(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

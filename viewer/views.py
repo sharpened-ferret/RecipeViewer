@@ -136,6 +136,27 @@ def addRecipe(request):
 
                 dateSaved = timezone.now()
 
+                r = Recipe(
+                    webAddress = webAddress,
+                    name = name,
+                    description = description,
+                    image = image,
+                    author = author,
+                    datePublished = datePublished,
+                    publisher = publisher,
+                    estimatedCost = estimatedCost,
+                    prepTime = prepTime,
+                    totalTime = totalTime,
+                    cookTime = cookTime,
+                    cookingMethod = cookingMethod,
+                    recipeCategory = recipeCategory,
+                    recipeCuisine = recipeCuisine,
+                    recipeIngredient = recipeIngredient,
+                    recipeInstructions = recipeInstructions,
+                    suitableForDiet = suitableForDiet,
+                    dateSaved = dateSaved
+                )
+                r.save()
 
 
                 # Nutritional Info Handling (Where exists)
@@ -202,32 +223,10 @@ def addRecipe(request):
                         sodiumContent = sodiumContent,
                         sugarContent = sugarContent,
                         transFatContent = transFatContent,
-                        unsaturatedFatContent = unsaturatedFatContent
+                        unsaturatedFatContent = unsaturatedFatContent,
+                        recipe = r
                     )
                     n.save()
-            
-                r = Recipe(
-                    webAddress = webAddress,
-                    name = name,
-                    description = description,
-                    image = image,
-                    author = author,
-                    datePublished = datePublished,
-                    publisher = publisher,
-                    estimatedCost = estimatedCost,
-                    prepTime = prepTime,
-                    totalTime = totalTime,
-                    cookTime = cookTime,
-                    cookingMethod = cookingMethod,
-                    nutrition = n,
-                    recipeCategory = recipeCategory,
-                    recipeCuisine = recipeCuisine,
-                    recipeIngredient = recipeIngredient,
-                    recipeInstructions = recipeInstructions,
-                    suitableForDiet = suitableForDiet,
-                    dateSaved = dateSaved
-                )
-                r.save()
             
                 print("success?")
 
