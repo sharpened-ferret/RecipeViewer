@@ -1,18 +1,18 @@
 from django.db import models
 
 class NutritionalInfo(models.Model):
-    calories = models.TextField()
-    carbohydrateContent = models.TextField()
-    cholesterolContent = models.TextField()
-    fatContent = models.TextField()
-    fiberContent = models.TextField()
-    proteinContent = models.TextField()
-    saturatedFatContent = models.TextField()
-    servingSize = models.TextField()
-    sodiumContent = models.TextField()
-    sugarContent = models.TextField()
-    transFatContent = models.TextField()
-    unsaturatedFatContent = models.TextField()
+    calories = models.TextField(blank=True, null=True)
+    carbohydrateContent = models.TextField(blank=True, null=True)
+    cholesterolContent = models.TextField(blank=True, null=True)
+    fatContent = models.TextField(blank=True, null=True)
+    fiberContent = models.TextField(blank=True, null=True)
+    proteinContent = models.TextField(blank=True, null=True)
+    saturatedFatContent = models.TextField(blank=True, null=True)
+    servingSize = models.TextField(blank=True, null=True)
+    sodiumContent = models.TextField(blank=True, null=True)
+    sugarContent = models.TextField(blank=True, null=True)
+    transFatContent = models.TextField(blank=True, null=True)
+    unsaturatedFatContent = models.TextField(blank=True, null=True)
 
 # Create your models here.
 class Recipe(models.Model):
@@ -20,7 +20,7 @@ class Recipe(models.Model):
      # From Thing schema
     webAddress = models.URLField()
     name = models.TextField()
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     image = models.URLField(blank=True, null=True)
 
      # From Creative Work schema
