@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.utils import timezone
+from datetime import date
+from dateutil.parser import *
 
 from scrape_schema_recipe import scrape_url
 
@@ -37,11 +39,16 @@ def addRecipe(request):
                 webAddress = recipe['url']
                 name = recipe['name']
                 description = recipe['description']
-                image = recipe['image']
+
+                if 'url' in recipe['image']:
+                    image = recipe['image']['url']
+                else:
+                    image = recipe['image'][0]
                 
                  # From Creative Work schema
                 author = recipe['author']
-                datePublished = recipe['datePublished']
+                datePublished = parse(recipe['datePublished'])
+                print(datePublished)
                 if 'publisher' in recipe:
                     publisher = recipe['publisher']
                 else:
@@ -90,6 +97,32 @@ def addRecipe(request):
                     suitableForDiet = None
 
                 dateSaved = timezone.now()
+
+            
+                r = Recipe(
+                    webAddress = webAddress,
+                    name = name,
+                    description = description,
+                    image = image,
+                    author = author,
+                    datePublished = datePublished,
+                    publisher = publisher,
+                    estimatedCost = estimatedCost,
+                    prepTime = prepTime,
+                    totalTime = totalTime,
+                    cookTime = cookTime,
+                    cookingMethod = cookingMethod,
+                    #nutrition = nutrition,
+                    recipeCategory = recipeCategory,
+                    recipeCuisine = recipeCuisine,
+                    recipeIngredient = recipeIngredient,
+                    recipeInstructions = recipeInstructions,
+                    suitableForDiet = suitableForDiet,
+                    dateSaved = dateSaved
+                )
+                r.save()
+            
+                print("success?")
 
                 if 'keywords' in recipe:
                     keywords = recipe['keywords']
