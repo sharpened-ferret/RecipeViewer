@@ -106,4 +106,7 @@ def addRecipe(request):
 def failedAdd(request):
     context = {}
     return render(request, 'viewer/failedAdd.html', context)
-    
+
+def successAdd(request):
+    context = {}
+    return render(request, 'viewer/successAdd.html', context)
