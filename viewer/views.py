@@ -27,6 +27,10 @@ def addRecipe(request):
             print("URL Recieved: " + url)
 
             recipe_list = scrape_url(url, python_objects=True)
+
+            # Warning: The following code has a painful number of if/else statements. I kinda hate it tbh.
+            # Unfortunately different sites have a habit of leaving out different schema sections. 
+            # Hopefully I'll think of a better way of doing this in the future.
             if len(recipe_list) > 0:
                 recipe = recipe_list[0]
                 
@@ -49,18 +53,36 @@ def addRecipe(request):
                     estimatedCost = recipe['estimatedCost']
                 else:
                     estimatedCost = None
-                prepTime = recipe['prepTime']
-                totalTime = recipe['totalTime']
+                if 'prepTime' in recipe:
+                    prepTime = recipe['prepTime']
+                else:
+                    prepTime = None
+                if 'totalTime' in recipe:
+                    totalTime = recipe['totalTime']
+                else:
+                    totalTime = None
 
                  # From Recipe schema
-                cookTime = recipe['cookTime']
+                if 'cookTime' in recipe:
+                    cookTime = recipe['cookTime']
+                else:
+                    cookTime = None
                 if 'cookingMethod' in recipe:
                     cookingMethod = recipe['cookingMethod']
                 else:
                     cookingMethod = None
-                nutrition = recipe['nutrition']
-                recipeCategory = recipe['recipeCategory']
-                recipeCuisine = recipe['recipeCuisine']
+                if 'nutrition' in recipe:
+                    nutrition = recipe['nutrition']
+                else:
+                    nutrition = None
+                if 'recipeCategory' in recipe:
+                    recipeCategory = recipe['recipeCategory']
+                else:
+                    recipeCategory = None
+                if 'recipeCuisine' in recipe:
+                    recipeCuisine = recipe['recipeCuisine']
+                else:
+                    recipeCuisine = None
                 recipeIngredient = recipe['recipeIngredient']
                 recipeInstructions = recipe['recipeInstructions']
                 if 'suitableForDiet' in recipe:
