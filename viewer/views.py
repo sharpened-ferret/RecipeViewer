@@ -12,12 +12,11 @@ def index(request):
     return HttpResponse("Hello world")
 
 def recipe(request):
-    template = loader.get_template('viewer/index.html')
     context = {}
     return render(request, 'viewer/index.html', context)
 
 def addRecipe(request):
-    template = loader.get_template('viewer/addRecipe.html')
+    
 
     if request.method == 'POST':
         form = AddRecipeForm(request.POST)
@@ -103,3 +102,8 @@ def addRecipe(request):
     else:
         form = AddRecipeForm()
     return render(request, 'viewer/addRecipe.html', {'form' : form})
+
+def failedAdd(request):
+    context = {}
+    return render(request, 'viewer/failedAdd.html', context)
+    
