@@ -128,6 +128,7 @@ def addRecipe(request):
                     keywords = recipe['keywords']
                 else:
                     keywords = None
+                return HttpResponseRedirect('success')
             else:
                 print("No recipes found")
 
