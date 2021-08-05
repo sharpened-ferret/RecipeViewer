@@ -25,7 +25,7 @@ class Recipe(models.Model):
 
      # From Creative Work schema
     author = models.TextField()
-    datePublished = models.DateField()
+    datePublished = models.DateField(blank=True, null=True)
     publisher = models.TextField(blank=True, null=True)
 
      # From How To schema

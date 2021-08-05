@@ -46,9 +46,28 @@ def addRecipe(request):
                     image = recipe['image'][0]
                 
                  # From Creative Work schema
-                author = recipe['author']
-                datePublished = parse(recipe['datePublished'])
-                print(datePublished)
+                if isinstance(recipe['author'], list):
+                    if 'name' in recipe['author'][0]:
+                        author = recipe['author'][0]['name']
+                    
+                    else:
+                        author = recipe['author'][0]
+                else:
+                    if isinstance(recipe['author'], str):
+                        author = recipe['author']
+                    elif 'name' in recipe['author']:
+                        author = recipe['author']['name']
+                    else:
+                        author = 'UNKNOWN'
+                if 'datePublished' in recipe:
+                    if isinstance(recipe['datePublished'], str):
+                        datePublished = parse(recipe['datePublished'])
+                    elif isinstance(recipe['datePublished'], date):
+                        datePublished = recipe['datePublished']
+                    else:
+                        datePublished = recipe['datePublished'].date()
+                else:
+                    datePublished = None
                 if 'publisher' in recipe:
                     publisher = recipe['publisher']
                 else:
