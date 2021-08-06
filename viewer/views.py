@@ -4,6 +4,7 @@ from django.template import loader
 from django.utils import timezone
 from datetime import date
 from dateutil.parser import parse
+import json
 
 from scrape_schema_recipe import scrape_url
 
@@ -15,9 +16,17 @@ def index(request):
 
 def recipe(request, recipe_id):
     recipe = Recipe.objects.filter(id = recipe_id).first()
-    print(recipe)
+
+    ingredients_list = "<ul id='ingredients-list'>"
+    for ingredient in json.loads(recipe.recipeIngredient):
+        ingredients_list += "<li>" + ingredient + "</li>"
+    ingredients_list += "</ul>"
+
     context = {
-        'name' : recipe.name
+        'name' : recipe.name,
+        'image_url' : recipe.image, 
+        'ingredients_list' : ingredients_list,
+        'instructions_list' : recipe.recipeInstructions
     }
     return render(request, 'viewer/viewRecipe.html', context)
 
@@ -120,7 +129,7 @@ def addRecipe(request):
                 else:
                     recipeCuisine = None
 
-                recipeIngredient = recipe['recipeIngredient']
+                recipeIngredient = json.dumps(recipe['recipeIngredient'])
 
                 if isinstance(recipe['recipeInstructions'], list):
                     if '@type' in recipe['recipeInstructions'][0]:
@@ -128,14 +137,14 @@ def addRecipe(request):
                             instructionList = recipe['recipeInstructions'][0]['itemListElement']
                         else:
                             instructionList = recipe['recipeInstructions']
-                        outputText = "<ol>"
+                        outputText = "<ol id='instructions-list'>"
                         for x in range(0, len(instructionList)):
                             currentStep = x
                             outputText += "<li>" + instructionList[x]['text'] + "</li>"
                         outputText += "</ol>"
                         recipeInstructions = outputText
                     elif len(recipe['recipeInstructions']) > 1:
-                        outputText = "<ol>"
+                        outputText = "<ol id='instructions-list'>"
                         for howToStep in recipe['recipeInstructions']:
                             outputText += "<li>" + recipe['recipeInstructions'][howToStep]['text'] + "</li>"
                         outputText += "</ol>"

@@ -3,9 +3,18 @@
     <head>
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'viewer/style.css' %}">
+        <title>{{ name }} - RecipeViewer</title>
     </head>
     <body>
-        <h1>Hello world</h1>
-        <p>I'm {{ name }}</p>
+        <h1 id="recipe-title">{{ name }}</h1>
+        <img class="recipe-image" src="{{ image_url }}" alt="Recipe Image">
+
+        {% comment %} 
+            This could potentially create problems if the user cooks recipes made of '</li></ul><script>...' 
+            I'm gonna rely on people not cooking delicious script injections for now.
+        {% endcomment %}
+        {{ ingredients_list | safe }}
+        {{ instructions_list | safe }}
+
     </body>
 </html>
