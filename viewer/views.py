@@ -247,18 +247,12 @@ def addRecipe(request):
                         recipe = r
                     )
                     n.save()
-            
-                print("success?")
-
-                if 'keywords' in recipe:
-                    keywords = recipe['keywords']
-                else:
-                    keywords = None
+                    print("Success")
                 return HttpResponseRedirect('success')
             else:
-                print("No recipes found")
+                print("No compatible recipes found")
 
-            return HttpResponseRedirect('add-recipe-handler/')
+            return HttpResponseRedirect('failed')
     else:
         form = AddRecipeForm()
     return render(request, 'viewer/addRecipe.html', {'form' : form})
