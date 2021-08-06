@@ -17,16 +17,48 @@ def index(request):
 def recipe(request, recipe_id):
     recipe = Recipe.objects.filter(id = recipe_id).first()
 
+    if recipe.estimatedCost == None:
+        estimatedCost = "Unknown"
+    else:
+        estimatedCost = recipe.estimatedCost
+
     ingredients_list = "<ul id='ingredients-list'>"
     for ingredient in json.loads(recipe.recipeIngredient):
         ingredients_list += "<li>" + ingredient + "</li>"
     ingredients_list += "</ul>"
 
+    if recipe.cookTime == None:
+        cookTime = "Unspecified"
+    else:
+        cookTime = recipe.cookTime
+    if recipe.prepTime == None:
+        prepTime = "Unspecified"
+    else:
+        prepTime = recipe.prepTime
+    if recipe.totalTime == None:
+        totalTime = "Unspecified"
+    else:
+        totalTime = recipe.totalTime
+
     context = {
         'name' : recipe.name,
         'image_url' : recipe.image, 
+        'description' : recipe.description,
         'ingredients_list' : ingredients_list,
-        'instructions_list' : recipe.recipeInstructions
+        'instructions_list' : recipe.recipeInstructions,
+        'recipe_category' : recipe.recipeCategory,
+        'recipe_cuisine' : recipe.recipeCuisine,
+        'dietType' : recipe.suitableForDiet,
+        'estimated_cost' : estimatedCost,
+        'author' : recipe.author,
+        'publisher' : recipe.publisher,
+        'date_published' : recipe.datePublished,
+        'cook_time' : cookTime,
+        'prep_time' : prepTime,
+        'total_time' : totalTime,
+
+        'date_saved' : recipe.dateSaved,
+        'url' : recipe.webAddress
     }
     return render(request, 'viewer/viewRecipe.html', context)
 

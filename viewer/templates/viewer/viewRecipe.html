@@ -3,18 +3,46 @@
     <head>
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'viewer/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'viewer/recipe-style.css' %}">
         <title>{{ name }} - RecipeViewer</title>
     </head>
     <body>
-        <h1 id="recipe-title">{{ name }}</h1>
-        <img class="recipe-image" src="{{ image_url }}" alt="Recipe Image">
+        <div id="recipe">
+            <h1 id="recipe-title">{{ name }}</h1>
+            <img class="recipe-image" src="{{ image_url }}" alt="Recipe Image">
+            <p id="recipe-description">{{ description }}</p>
 
-        {% comment %} 
-            This could potentially create problems if the user cooks recipes made of '</li></ul><script>...' 
-            I'm gonna rely on people not cooking delicious script injections for now.
-        {% endcomment %}
-        {{ ingredients_list | safe }}
-        {{ instructions_list | safe }}
+            <div id="recipe-info">
+                <p id="recipe-category">Category: {{ recipe_category }}</p>
+                <p id="recipe-cuisine">Cuisine: {{ recipe_cuisine }}</p>
+                <p id="recipe-diet">Diet Type: {{ diet_type }}</p>
+                <p id="recipe-cost">Estimated Cost: {{ estimated_cost }}
+            </div>
+
+            <div id="publisher-info">
+                <p id="author">Author: {{ author }}</p>
+                <p id="publisher">Publisher: {{ publisher }}</p>
+                <p id="date-published">Date Published: {{date_published}}</p>
+            </div>
+
+            <div id="timing-info">
+                <p id="cook-time">Cooking Time: {{ cook_time }}</p>
+                <p id="prep-time">Prep Time: {{ prep_time }}</p>
+                <p id="total-time">Total Time: {{ total_time }}</p>
+            </div>
+
+            {% comment %} 
+                This could potentially create problems if the user cooks recipes made of '</li></ul><script>...' 
+                I'm gonna rely on people not cooking delicious script injections for now.
+            {% endcomment %}
+            {{ ingredients_list | safe }}
+            {{ instructions_list | safe }}
+        </div>
+
+        <div id="footer">
+            <p id="date-saved">Recipe saved on {{ date_saved }}</p>
+            <p id="url">Original URL: {{ url }}</p>
+        </div>
 
     </body>
 </html>
