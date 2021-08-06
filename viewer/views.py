@@ -7,7 +7,7 @@ from dateutil.parser import *
 
 from scrape_schema_recipe import scrape_url
 
-from .models import Recipe, NutritionalInfo
+from .models import Recipe, NutritionalInfo, Keyword
 from .forms import AddRecipeForm
 
 def index(request):
@@ -136,6 +136,7 @@ def addRecipe(request):
 
                 dateSaved = timezone.now()
 
+
                 r = Recipe(
                     webAddress = webAddress,
                     name = name,
@@ -157,6 +158,25 @@ def addRecipe(request):
                     dateSaved = dateSaved
                 )
                 r.save()
+
+
+                # Keywords Handling
+                if 'keywords' in recipe:
+                    keywords = []
+                    if isinstance(recipe['keywords'], str):
+                        keywords = recipe['keywords'].split(", ")
+                    elif isinstance(recipe['keywords'], list):
+                        keywords = recipe['keywords']
+                    print(recipe['keywords'])
+                    print(keywords)
+                    if len(keywords) > 0:
+                        for word in keywords:
+                            k = Keyword(
+                                    recipe = r, 
+                                    keyword = word
+                                )
+                            k.save()
+                    
 
 
                 # Nutritional Info Handling (Where exists)

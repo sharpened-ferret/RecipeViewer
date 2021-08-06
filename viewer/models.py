@@ -33,6 +33,9 @@ class Recipe(models.Model):
     dateSaved = models.DateTimeField()
 
 class NutritionalInfo(models.Model):
+    def __str__(self):
+        return self.recipe.name + " nutritional info"
+
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     calories = models.TextField(blank=True, null=True)
     carbohydrateContent = models.TextField(blank=True, null=True)
@@ -47,9 +50,10 @@ class NutritionalInfo(models.Model):
     transFatContent = models.TextField(blank=True, null=True)
     unsaturatedFatContent = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return self.recipe.name + " nutritional info"
 
 class Keyword(models.Model):
+    def __str__(self):
+        return self.keyword + " | " + self.recipe.name
+
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     keyword = models.TextField()
