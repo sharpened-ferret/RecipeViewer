@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.utils import timezone
 from datetime import date
-from dateutil.parser import *
+from dateutil.parser import parse
 
 from scrape_schema_recipe import scrape_url
 
@@ -89,28 +89,35 @@ def addRecipe(request):
                 else:
                     totalTime = None
 
+
                  # From Recipe schema
                 if 'cookTime' in recipe:
                     cookTime = recipe['cookTime']
                 else:
                     cookTime = None
+
                 if 'cookingMethod' in recipe:
                     cookingMethod = recipe['cookingMethod']
                 else:
                     cookingMethod = None
+
                 if 'nutrition' in recipe:
                     nutrition = recipe['nutrition']
                 else:
                     nutrition = None
+
                 if 'recipeCategory' in recipe:
                     recipeCategory = recipe['recipeCategory']
                 else:
                     recipeCategory = None
+
                 if 'recipeCuisine' in recipe:
                     recipeCuisine = recipe['recipeCuisine']
                 else:
                     recipeCuisine = None
+
                 recipeIngredient = recipe['recipeIngredient']
+
                 if isinstance(recipe['recipeInstructions'], list):
                     if '@type' in recipe['recipeInstructions'][0]:
                         outputText = "<ol>"
@@ -129,6 +136,7 @@ def addRecipe(request):
                         recipeInstructions = "<p>" + recipe['recipeInstructions'][0] + "</p>"
                 else:
                     recipeInstructions = recipe['recipeInstructions']
+
                 if 'suitableForDiet' in recipe:
                     suitableForDiet = recipe['suitableForDiet']
                 else:
@@ -137,6 +145,7 @@ def addRecipe(request):
                 dateSaved = timezone.now()
 
 
+                # Saves creates new recipe object in DB
                 r = Recipe(
                     webAddress = webAddress,
                     name = name,
@@ -163,12 +172,12 @@ def addRecipe(request):
                 # Keywords Handling
                 if 'keywords' in recipe:
                     keywords = []
+
                     if isinstance(recipe['keywords'], str):
                         keywords = recipe['keywords'].split(", ")
                     elif isinstance(recipe['keywords'], list):
                         keywords = recipe['keywords']
-                    print(recipe['keywords'])
-                    print(keywords)
+
                     if len(keywords) > 0:
                         for word in keywords:
                             k = Keyword(
@@ -185,52 +194,64 @@ def addRecipe(request):
                         calories = recipe['nutrition']['calories']
                     else:
                         calories = None
+
                     if 'carbohydrateContent' in recipe['nutrition']:
                         carbohydrateContent = recipe['nutrition']['carbohydrateContent']
                     else:
                         carbohydrateContent = None
+
                     if 'cholesterolContent' in recipe['nutrition']:
                         cholesterolContent = recipe['nutrition']['cholesterolContent']
                     else:
                         cholesterolContent = None
+
                     if 'fatContent' in recipe['nutrition']:
                         fatContent = recipe['nutrition']['fatContent']
                     else:
                         fatContent = None
+
                     if 'fiberContent' in recipe['nutrition']:
                         fiberContent = recipe['nutrition']['fiberContent']
                     else:
                         fiberContent = None
+
                     if 'proteinContent' in recipe['nutrition']:
                         proteinContent = recipe['nutrition']['proteinContent']
                     else:
                         proteinContent = None
+
                     if 'saturatedFatContent' in recipe['nutrition']:
                         saturatedFatContent = recipe['nutrition']['saturatedFatContent']
                     else:
                         saturatedFatContent = None
+
                     if 'servingSize' in recipe['nutrition']:
                         servingSize = recipe['nutrition']['servingSize']
                     else:
                         servingSize = None
+
                     if 'sodiumContent' in recipe['nutrition']:
                         sodiumContent = recipe['nutrition']['sodiumContent']
                     else:
                         sodiumContent = None
+
                     if 'sugarContent' in recipe['nutrition']:
                         sugarContent = recipe['nutrition']['sugarContent']
                     else:
                         sugarContent = None
+
                     if 'transFatContent' in recipe['nutrition']:
                         transFatContent = recipe['nutrition']['transFatContent']
                     else:
                         transFatContent = None
+
                     if 'unsaturatedFatContent' in recipe['nutrition']:
                         unsaturatedFatContent = recipe['nutrition']['unsaturatedFatContent']
                     else:
                         unsaturatedFatContent = None
                     
                     
+                    # Creates nutritional info object in DB
                     n = NutritionalInfo(
                         calories = calories,
                         carbohydrateContent = carbohydrateContent,
@@ -247,12 +268,13 @@ def addRecipe(request):
                         recipe = r
                     )
                     n.save()
+
+
                     print("Success")
                 return HttpResponseRedirect('success')
             else:
                 print("No compatible recipes found")
-
-            return HttpResponseRedirect('failed')
+                return HttpResponseRedirect('failed')
     else:
         form = AddRecipeForm()
     return render(request, 'viewer/addRecipe.html', {'form' : form})
