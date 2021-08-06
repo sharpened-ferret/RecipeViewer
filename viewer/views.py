@@ -186,7 +186,7 @@ def addRecipe(request):
                         for word in keywords:
                             k = Keyword(
                                     recipe = r, 
-                                    keyword = word
+                                    keyword = word.lower()
                                 )
                             k.save()
                     
