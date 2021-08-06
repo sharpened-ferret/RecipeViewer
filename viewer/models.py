@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class Recipe(models.Model):
     def __str__(self):
-        return self.name + " recipe"
+        return self.name
     
      # From Thing schema
     webAddress = models.URLField()

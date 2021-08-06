@@ -13,9 +13,13 @@ from .forms import AddRecipeForm
 def index(request):
     return HttpResponse("Hello world")
 
-def recipe(request):
-    context = {}
-    return render(request, 'viewer/index.html', context)
+def recipe(request, recipe_id):
+    recipe = Recipe.objects.filter(id = recipe_id).first()
+    print(recipe)
+    context = {
+        'name' : recipe.name
+    }
+    return render(request, 'viewer/viewRecipe.html', context)
 
 def addRecipe(request):
     
