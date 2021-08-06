@@ -120,10 +120,14 @@ def addRecipe(request):
 
                 if isinstance(recipe['recipeInstructions'], list):
                     if '@type' in recipe['recipeInstructions'][0]:
+                        if recipe['recipeInstructions'][0]['@type'] == 'HowToSection':
+                            instructionList = recipe['recipeInstructions'][0]['itemListElement']
+                        else:
+                            instructionList = recipe['recipeInstructions']
                         outputText = "<ol>"
-                        for x in range(0, len(recipe['recipeInstructions'])):
+                        for x in range(0, len(instructionList)):
                             currentStep = x
-                            outputText += "<li>" + recipe['recipeInstructions'][x]['text'] + "</li>"
+                            outputText += "<li>" + instructionList[x]['text'] + "</li>"
                         outputText += "</ol>"
                         recipeInstructions = outputText
                     elif len(recipe['recipeInstructions']) > 1:
