@@ -15,7 +15,6 @@ from .forms import AddRecipeForm
 def index(request):
     context = {}
     return render(request, 'viewer/index.html', context)
-    return HttpResponse("Hello world")
 
 def recipe(request, recipe_id):
     recipe = Recipe.objects.filter(id = recipe_id).first()

@@ -1,0 +1,23 @@
+.index-container {
+    padding-top: 35vh;
+    max-width: 80%;
+    margin: auto;
+    display: flex;
+    align-content: center;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.add-recipe-button {
+    display: block;
+    padding: 2em;
+    margin: 1em;
+    background-color: lightgray;
+}
+
+.search-recipe-button {
+    display: block;
+    padding: 2em;
+    margin: 1em;
+    background-color: lightgray;
+}

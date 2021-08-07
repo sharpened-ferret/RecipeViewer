@@ -3,8 +3,17 @@
     <head>
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'viewer/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'viewer/index-style.css' %}">
     </head>
     <body>
-        <h1>Home</h1>
+        <div class="index-container">
+            
+            <div class="add-recipe-button">
+                <h2>Add Recipe</h2>
+            </div>
+            <div class="search-recipe-button">
+                <h2>Search Recipes</h2>
+            </div>
+        </div>
     </body>
 </html>
