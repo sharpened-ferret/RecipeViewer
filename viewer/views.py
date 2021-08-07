@@ -1,3 +1,4 @@
+import viewer
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
@@ -12,6 +13,8 @@ from .models import Recipe, NutritionalInfo, Keyword
 from .forms import AddRecipeForm
 
 def index(request):
+    context = {}
+    return render(request, 'viewer/index.html', context)
     return HttpResponse("Hello world")
 
 def recipe(request, recipe_id):
