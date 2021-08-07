@@ -1,3 +1,18 @@
-h1, h2 {
+body {
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.heading-text {
+    flex-basis: 100%;
+    text-align: center;
+}
+
+.container {
+    padding-top: 30vh;
+    max-width: 100%;
+    margin: auto;
+    display: flex;
+    align-content: center;
+    flex-flow: row wrap;
+    justify-content: center;
 }
