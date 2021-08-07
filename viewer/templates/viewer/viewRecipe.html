@@ -9,8 +9,10 @@
     <body>
         <div id="recipe">
             <h1 id="recipe-title">{{ name }}</h1>
-            <img class="recipe-image" src="{{ image_url }}" alt="Recipe Image">
-            <p id="recipe-description">{{ description }}</p>
+            <div id="description-block">
+                <img class="recipe-image" src="{{ image_url }}" alt="Recipe Image">
+                <p id="recipe-description">{{ description }}</p>
+            </div>
 
             <div id="recipe-info">
                 <p id="recipe-category">Category: {{ recipe_category }}</p>
@@ -25,6 +27,8 @@
                 <p id="date-published">Date Published: {{date_published}}</p>
             </div>
 
+            <div class="break"></div>
+
             <div id="timing-info">
                 <p id="cook-time">Cooking Time: {{ cook_time }}</p>
                 <p id="prep-time">Prep Time: {{ prep_time }}</p>
@@ -35,14 +39,22 @@
                 This could potentially create problems if the user cooks recipes made of '</li></ul><script>...' 
                 I'm gonna rely on people not cooking delicious script injections for now.
             {% endcomment %}
-            {{ ingredients_list | safe }}
-            {{ instructions_list | safe }}
+            <div id="ingredients-block">
+                <h2>Ingredients</h2>
+                {{ ingredients_list | safe }}
+            </div>
+            <div id="instructions-block">
+                <h2>Method</h2>
+                {{ instructions_list | safe }}
+            </div>
+
+            <div id="footer">
+                <p id="date-saved">Recipe saved on {{ date_saved }}</p>
+                <p id="url">Original URL: {{ url }}</p>
+            </div>
         </div>
 
-        <div id="footer">
-            <p id="date-saved">Recipe saved on {{ date_saved }}</p>
-            <p id="url">Original URL: {{ url }}</p>
-        </div>
+        
 
     </body>
 </html>
