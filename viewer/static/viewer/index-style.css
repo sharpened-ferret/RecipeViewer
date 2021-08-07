@@ -1,6 +1,6 @@
 .index-container {
-    padding-top: 35vh;
-    max-width: 80%;
+    padding-top: 30vh;
+    max-width: 100%;
     margin: auto;
     display: flex;
     align-content: center;
@@ -8,16 +8,26 @@
     justify-content: center;
 }
 
-.add-recipe-button {
+.welcome-text {
+    flex-basis: 100%;
+    text-align: center;
+    padding-bottom: 1em;
+}
+
+.button {
     display: block;
     padding: 2em;
     margin: 1em;
     background-color: lightgray;
 }
 
-.search-recipe-button {
-    display: block;
-    padding: 2em;
-    margin: 1em;
-    background-color: lightgray;
+a {
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    flex-basis: 30vh;
+}
+
+a :hover {
+    background-color: darkgray;
 }
