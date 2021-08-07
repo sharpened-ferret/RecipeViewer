@@ -356,3 +356,7 @@ def failedAdd(request):
 def successAdd(request):
     context = {}
     return render(request, 'viewer/successAdd.html', context)
+
+def search(request):
+    context = {}
+    return render(request, 'viewer/search.html', context)
