@@ -60,7 +60,26 @@ def recipe(request, recipe_id):
         'date_saved' : recipe.dateSaved,
         'url' : recipe.webAddress
     }
-    return render(request, 'viewer/viewRecipe.html', context)
+
+    if NutritionalInfo.objects.filter(recipe_id = recipe_id).count() > 0:
+        nutritionalInfo = NutritionalInfo.objects.filter(recipe_id = recipe_id).first()
+
+        context['calories'] = nutritionalInfo.calories
+        context['carbohydrates'] = nutritionalInfo.carbohydrateContent
+        context['sugar'] = nutritionalInfo.sugarContent
+        context['cholesterol'] = nutritionalInfo.cholesterolContent
+        context['fat'] = nutritionalInfo.fatContent
+        context['fat_saturated'] = nutritionalInfo.saturatedFatContent
+        context['fat_unsaturated'] = nutritionalInfo.unsaturatedFatContent
+        context['fat_trans'] = nutritionalInfo.transFatContent
+        context['fibre'] = nutritionalInfo.fiberContent
+        context['protein'] = nutritionalInfo.proteinContent
+        context['sodium'] = nutritionalInfo.sodiumContent
+        context['serving_size'] = nutritionalInfo.servingSize
+
+        return render(request, 'viewer/viewRecipeNutrition.html', context)
+    else:
+        return render(request, 'viewer/viewRecipe.html', context)
 
 def addRecipe(request):
     
@@ -242,62 +261,62 @@ def addRecipe(request):
                     if 'calories' in recipe['nutrition']:
                         calories = recipe['nutrition']['calories']
                     else:
-                        calories = None
+                        calories = ""
 
                     if 'carbohydrateContent' in recipe['nutrition']:
                         carbohydrateContent = recipe['nutrition']['carbohydrateContent']
                     else:
-                        carbohydrateContent = None
+                        carbohydrateContent = ""
 
                     if 'cholesterolContent' in recipe['nutrition']:
                         cholesterolContent = recipe['nutrition']['cholesterolContent']
                     else:
-                        cholesterolContent = None
+                        cholesterolContent = ""
 
                     if 'fatContent' in recipe['nutrition']:
                         fatContent = recipe['nutrition']['fatContent']
                     else:
-                        fatContent = None
+                        fatContent = ""
 
                     if 'fiberContent' in recipe['nutrition']:
                         fiberContent = recipe['nutrition']['fiberContent']
                     else:
-                        fiberContent = None
+                        fiberContent = ""
 
                     if 'proteinContent' in recipe['nutrition']:
                         proteinContent = recipe['nutrition']['proteinContent']
                     else:
-                        proteinContent = None
+                        proteinContent = ""
 
                     if 'saturatedFatContent' in recipe['nutrition']:
                         saturatedFatContent = recipe['nutrition']['saturatedFatContent']
                     else:
-                        saturatedFatContent = None
+                        saturatedFatContent = ""
 
                     if 'servingSize' in recipe['nutrition']:
                         servingSize = recipe['nutrition']['servingSize']
                     else:
-                        servingSize = None
+                        servingSize = ""
 
                     if 'sodiumContent' in recipe['nutrition']:
                         sodiumContent = recipe['nutrition']['sodiumContent']
                     else:
-                        sodiumContent = None
+                        sodiumContent = ""
 
                     if 'sugarContent' in recipe['nutrition']:
                         sugarContent = recipe['nutrition']['sugarContent']
                     else:
-                        sugarContent = None
+                        sugarContent = ""
 
                     if 'transFatContent' in recipe['nutrition']:
                         transFatContent = recipe['nutrition']['transFatContent']
                     else:
-                        transFatContent = None
+                        transFatContent = ""
 
                     if 'unsaturatedFatContent' in recipe['nutrition']:
                         unsaturatedFatContent = recipe['nutrition']['unsaturatedFatContent']
                     else:
-                        unsaturatedFatContent = None
+                        unsaturatedFatContent = ""
                     
                     
                     # Creates nutritional info object in DB

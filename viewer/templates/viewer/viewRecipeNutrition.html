@@ -48,6 +48,59 @@
                 {{ instructions_list | safe }}
             </div>
 
+            <div id="nutrition-block">
+                <table id="nutrition-table">
+                    <tr>
+                        <th>Calories: </td>
+                        <td>{{ calories }}</td>
+                    </tr>
+                    <tr>
+                        <th>Carbohydrates: </td>
+                        <td>{{ carbohydrates }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sugar: </td>
+                        <td>{{ sugar }}</td>
+                    </tr>
+                    <tr>
+                        <th>Cholesterol: </td>
+                        <td>{{ cholesterol }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fat: </td>
+                        <td>{{ fat }}</td>
+                    </tr>
+                    <tr>
+                        <th>Saturated Fat: </td>
+                        <td>{{ fat_saturated }}</td>
+                    </tr>
+                    <tr>
+                        <th>Unsaturated Fat: </td>
+                        <td>{{ fat_unsaturated }}</td>
+                    </tr>
+                    <tr>
+                        <th>Trans Fat: </td>
+                        <td>{{ fat_trans }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fibre: </td>
+                        <td>{{ fibre }}</td>
+                    </tr>
+                    <tr>
+                        <th>Protein: </td>
+                        <td>{{ protein }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sodium: </td>
+                        <td>{{ sodium }}</td>
+                    </tr>
+                    <tr>
+                        <th>Serving Size: </td>
+                        <td>{{ serving_size }}</td>
+                    </tr>
+                </table>
+            </div>
+
             <div id="footer">
                 <p id="date-saved">Recipe saved on {{ date_saved }}</p>
                 <p id="url">Original URL: <a href="{{ url }}">{{ url }}</a></p>
