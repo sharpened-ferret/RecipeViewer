@@ -364,6 +364,8 @@ def search(request):
         if searchForm.is_valid():
             searchTerm = searchForm.cleaned_data['searchTerm']
             print("Search Term Recieved: " + searchTerm)
+            results = Recipe.objects.filter(name__icontains = searchTerm)
+            print(results)
         else:
             searchForm = SearchForm()
     else:
