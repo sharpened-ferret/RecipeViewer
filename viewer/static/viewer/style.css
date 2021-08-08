@@ -35,3 +35,8 @@ a {
 a :hover {
     background-color: darkgray;
 }
+
+.search-form {
+    flex-basis: 100%;
+    text-align: center;
+}

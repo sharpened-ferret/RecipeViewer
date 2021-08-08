@@ -10,7 +10,7 @@ import json
 from scrape_schema_recipe import scrape_url
 
 from .models import Recipe, NutritionalInfo, Keyword
-from .forms import AddRecipeForm
+from .forms import AddRecipeForm, SearchForm
 
 def index(request):
     context = {}
@@ -358,5 +358,15 @@ def successAdd(request):
     return render(request, 'viewer/successAdd.html', context)
 
 def search(request):
-    context = {}
-    return render(request, 'viewer/search.html', context)
+    if request.method == 'POST':
+        searchForm = SearchForm(request.POST)
+
+        if searchForm.is_valid():
+            searchTerm = searchForm.cleaned_data['searchTerm']
+            print("Search Term Recieved: " + searchTerm)
+        else:
+            searchForm = SearchForm()
+    else:
+        searchForm = SearchForm()
+
+    return render(request, 'viewer/search.html', {'searchForm' : searchForm})
