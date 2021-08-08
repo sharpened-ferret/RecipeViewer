@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.utils import timezone
+from django.db.models import Q
 from datetime import date
 from dateutil.parser import parse
 import json
@@ -364,8 +365,33 @@ def search(request):
         if searchForm.is_valid():
             searchTerm = searchForm.cleaned_data['searchTerm']
             print("Search Term Recieved: " + searchTerm)
-            results = Recipe.objects.filter(name__icontains = searchTerm)
-            print(results)
+
+            # Stores IDs of returned recipes to prevent returning any multiple times
+            existingResults = []
+
+            
+            # Searches recipe names and keywords  -  fairly primitive
+            # This could probably be improved by migrating to a DBMS with more advanced text search (eg. PostGreSQL)
+            exactMatch = Recipe.objects.filter(name__iexact = searchTerm)
+            titleMatch = Recipe.objects.filter(name__icontains = searchTerm)
+            keywordMatch = Keyword.objects.filter(keyword__icontains = searchTerm).values('recipe')
+
+            # Returns exact matches first, followed by partial title matches, and finally keyword tags
+            for recipe in exactMatch:
+                if recipe.id not in existingResults:
+                    print(recipe.name)
+                    existingResults.append(recipe.id)
+            for recipe in titleMatch:
+                if recipe.id not in existingResults:
+                    print(recipe.name)
+                    existingResults.append(recipe.id)
+            for keyword in keywordMatch:
+                recipe_id = keyword['recipe']
+                if recipe_id not in existingResults:
+                    recipe = Recipe.objects.filter(id = recipe_id).first()
+                    print(recipe.name)
+                    existingResults.append(recipe_id)
+
         else:
             searchForm = SearchForm()
     else:
