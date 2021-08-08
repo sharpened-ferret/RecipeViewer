@@ -32,11 +32,33 @@ a {
     flex-basis: 30vh;
 }
 
-a :hover {
+.menu-button :hover {
     background-color: darkgray;
 }
 
 .search-form {
     flex-basis: 100%;
     text-align: center;
+    padding-bottom: 1em;
 }
+
+.search-results {
+    justify-content: center;
+
+}
+
+.search-result {
+    max-width: 80%;
+    margin: auto;
+    flex-basis: 100%;
+}
+
+.search-result img {
+    max-width: 100%;
+}
+
+.break {
+    flex-basis: 100%;
+    min-height: 10px;
+}
+
