@@ -366,6 +366,10 @@ def search(request):
             searchTerm = searchForm.cleaned_data['searchTerm']
             print("Search Term Recieved: " + searchTerm)
 
+
+            results = ""
+            resultFormat = '<div class="search-result"><a href="./recipe/{id}"><div class="clickable-area"><h2>{name}</h2><p>{description}</p><img src="{image}" alt="Recipe Image"></div></a></div>'
+
             # Stores IDs of returned recipes to prevent returning any multiple times
             existingResults = []
 
@@ -375,22 +379,43 @@ def search(request):
             exactMatch = Recipe.objects.filter(name__iexact = searchTerm)
             titleMatch = Recipe.objects.filter(name__icontains = searchTerm)
             keywordMatch = Keyword.objects.filter(keyword__icontains = searchTerm).values('recipe')
-
             # Returns exact matches first, followed by partial title matches, and finally keyword tags
             for recipe in exactMatch:
                 if recipe.id not in existingResults:
-                    print(recipe.name)
+                    results += resultFormat.format(
+                        id = recipe.id,
+                        name = recipe.name,
+                        description = recipe.description,
+                        image = recipe.image
+                    )
+
                     existingResults.append(recipe.id)
             for recipe in titleMatch:
                 if recipe.id not in existingResults:
-                    print(recipe.name)
+                    results += resultFormat.format(
+                        id = recipe.id,
+                        name = recipe.name,
+                        description = recipe.description,
+                        image = recipe.image
+                    )
                     existingResults.append(recipe.id)
             for keyword in keywordMatch:
                 recipe_id = keyword['recipe']
                 if recipe_id not in existingResults:
                     recipe = Recipe.objects.filter(id = recipe_id).first()
-                    print(recipe.name)
+                    results += resultFormat.format(
+                        id = recipe.id,
+                        name = recipe.name,
+                        description = recipe.description,
+                        image = recipe.image
+                    )
                     existingResults.append(recipe_id)
+
+            if len(existingResults) == 0:
+                results = "<h2>No recipes found.</h2>"
+            
+            return render(request, 'viewer/searchResults.html', {'searchForm' : searchForm, 'search_results' : results})
+
 
         else:
             searchForm = SearchForm()
