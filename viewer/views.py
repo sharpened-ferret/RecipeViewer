@@ -200,7 +200,7 @@ def addRecipe(request):
                     elif len(recipe['recipeInstructions']) > 1:
                         outputText = "<ol id='instructions-list'>"
                         for howToStep in recipe['recipeInstructions']:
-                            outputText += "<li>" + recipe['recipeInstructions'][howToStep]['text'] + "</li>"
+                            outputText += "<li>" + howToStep + "</li>"
                         outputText += "</ol>"
                         recipeInstructions = outputText
                     else:
