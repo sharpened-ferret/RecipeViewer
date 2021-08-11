@@ -51,7 +51,7 @@ def recipe(request, recipe_id):
         'instructions_list' : recipe.recipeInstructions,
         'recipe_category' : recipe.recipeCategory,
         'recipe_cuisine' : recipe.recipeCuisine,
-        'dietType' : recipe.suitableForDiet,
+        'diet_type' : recipe.suitableForDiet,
         'estimated_cost' : estimatedCost,
         'author' : recipe.author,
         'publisher' : recipe.publisher,
@@ -373,43 +373,54 @@ def search(request):
             # Stores IDs of returned recipes to prevent returning any multiple times
             existingResults = []
 
-            
-            # Searches recipe names and keywords  -  fairly primitive
-            # This could probably be improved by migrating to a DBMS with more advanced text search (eg. PostGreSQL)
-            exactMatch = Recipe.objects.filter(name__iexact = searchTerm)
-            titleMatch = Recipe.objects.filter(name__icontains = searchTerm)
-            keywordMatch = Keyword.objects.filter(keyword__icontains = searchTerm).values('recipe')
-            # Returns exact matches first, followed by partial title matches, and finally keyword tags
-            for recipe in exactMatch:
-                if recipe.id not in existingResults:
+            # "*" Search command to return all results
+            if searchTerm == "*":
+                allRecipes = Recipe.objects.all()
+                for recipe in allRecipes:
                     results += resultFormat.format(
-                        id = recipe.id,
-                        name = recipe.name,
-                        description = recipe.description,
-                        image = recipe.image
-                    )
+                            id = recipe.id,
+                            name = recipe.name,
+                            description = recipe.description,
+                            image = recipe.image
+                        )
+                    existingResults.append(recipe.id)
+            else:
+                # Searches recipe names and keywords  -  fairly primitive
+                # This could probably be improved by migrating to a DBMS with more advanced text search (eg. PostGreSQL)
+                exactMatch = Recipe.objects.filter(name__iexact = searchTerm)
+                titleMatch = Recipe.objects.filter(name__icontains = searchTerm)
+                keywordMatch = Keyword.objects.filter(keyword__icontains = searchTerm).values('recipe')
+                # Returns exact matches first, followed by partial title matches, and finally keyword tags
+                for recipe in exactMatch:
+                    if recipe.id not in existingResults:
+                        results += resultFormat.format(
+                            id = recipe.id,
+                            name = recipe.name,
+                            description = recipe.description,
+                            image = recipe.image
+                        )
 
-                    existingResults.append(recipe.id)
-            for recipe in titleMatch:
-                if recipe.id not in existingResults:
-                    results += resultFormat.format(
-                        id = recipe.id,
-                        name = recipe.name,
-                        description = recipe.description,
-                        image = recipe.image
-                    )
-                    existingResults.append(recipe.id)
-            for keyword in keywordMatch:
-                recipe_id = keyword['recipe']
-                if recipe_id not in existingResults:
-                    recipe = Recipe.objects.filter(id = recipe_id).first()
-                    results += resultFormat.format(
-                        id = recipe.id,
-                        name = recipe.name,
-                        description = recipe.description,
-                        image = recipe.image
-                    )
-                    existingResults.append(recipe_id)
+                        existingResults.append(recipe.id)
+                for recipe in titleMatch:
+                    if recipe.id not in existingResults:
+                        results += resultFormat.format(
+                            id = recipe.id,
+                            name = recipe.name,
+                            description = recipe.description,
+                            image = recipe.image
+                        )
+                        existingResults.append(recipe.id)
+                for keyword in keywordMatch:
+                    recipe_id = keyword['recipe']
+                    if recipe_id not in existingResults:
+                        recipe = Recipe.objects.filter(id = recipe_id).first()
+                        results += resultFormat.format(
+                            id = recipe.id,
+                            name = recipe.name,
+                            description = recipe.description,
+                            image = recipe.image
+                        )
+                        existingResults.append(recipe_id)
 
             if len(existingResults) == 0:
                 results = "<h2>No recipes found.</h2>"
