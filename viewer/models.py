@@ -9,7 +9,7 @@ class Recipe(models.Model):
     webAddress = models.URLField()
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
-    image = models.URLField(blank=True, null=True)
+    image = models.TextField(blank=True, null=True)
 
      # From Creative Work schema
     author = models.TextField()
