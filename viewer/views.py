@@ -60,7 +60,7 @@ def recipe(request, recipe_id):
         'prep_time' : prepTime,
         'total_time' : totalTime,
 
-        'date_saved' : recipe.dateSaved,
+        'date_saved' : recipe.dateSaved.strftime("%A %d %B %Y %X"),
         'url' : recipe.webAddress
     }
 
