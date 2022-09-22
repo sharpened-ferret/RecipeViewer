@@ -31,6 +31,7 @@ body {
     background-color: lightgray;
     border: none;
     font-weight: bold;
+    width: 20%;
 }
 
 .search-button:hover {
@@ -38,8 +39,23 @@ body {
 }
 
 input[type=text] {
-    width: auto;
+    width: 70%;
+    padding-left: 0;
     padding: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+input[type=url] {
+    width: 70%;
+    padding-left: 0;
+    padding: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+label[for="id_url"] {
+    display: none;
 }
 
 a {
@@ -54,9 +70,15 @@ a {
 }
 
 .search-form {
-    flex-basis: 100%;
+    width: 100%;
+    max-width: 80vh;
     text-align: center;
     padding-bottom: 1em;
+}
+
+.add-recipe-form {
+    flex-basis:80vh;
+    text-align: center;
 }
 
 .search-results {
