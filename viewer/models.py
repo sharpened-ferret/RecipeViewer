@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 # Create your models here.
 class Recipe(models.Model):
@@ -31,6 +32,12 @@ class Recipe(models.Model):
     suitableForDiet = models.TextField(blank=True, null=True) # need to process enums for storage
 
     dateSaved = models.DateTimeField()
+
+class AddRecipeManual(ModelForm):
+    class Meta:
+        model = Recipe
+        fields = '__all__'
+        
 
 class NutritionalInfo(models.Model):
     def __str__(self):

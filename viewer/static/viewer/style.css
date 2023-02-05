@@ -107,3 +107,7 @@ img {
     min-height: 10px;
 }
 
+label,input{
+    display:flex;
+    flex-direction:column;
+}

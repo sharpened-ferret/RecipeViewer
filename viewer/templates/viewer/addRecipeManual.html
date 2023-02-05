@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'viewer/style.css' %}">
+        <link rel="icon" type="image/x-icon" href="{% static 'viewer/img/favicon.ico' %}">
+        <title>Add Recipe - RecipeViewer</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="heading-text">Add recipe</h1>
+            <div class="add-recipe-form">
+                <p>Submit a recipe's data to save it to the database.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="input_block" style="display:inline-block;">
+                    <div>
+                        <label for="id_webAddress">Web Address:</label>
+                        {{ manual_recipe_form.webAddress.errors }}
+                        {{ manual_recipe_form.webAddress }}
+                    </div>
+                    <div>
+                        <label for="id_name">Recipe Name:</label>
+                        {{ manual_recipe_form.name.errors }}
+                        {{ manual_recipe_form.name }}
+                    </div>
+                    <div>
+                        <label for="id_description">Description:</label>
+                        {{ manual_recipe_form.description.errors }}
+                        {{ manual_recipe_form.description }}
+                    </div>
+                    <div>
+                        <label for="id_image">Image Address:</label>
+                        {{ manual_recipe_form.image.errors }}
+                        {{ manual_recipe_form.image }}
+                    </div>
+                    <div>
+                        <label for="id_author">Author:</label>
+                        {{ manual_recipe_form.author.errors }}
+                        {{ manual_recipe_form.author }}
+                    </div>
+                    <div>
+                        <label for="id_datePublished">Date Published:</label>
+                        {{ manual_recipe_form.datePublished.errors }}
+                        {{ manual_recipe_form.datePublished }}
+                    </div>
+                    <div>
+                        <label for="id_published">Publisher:</label>
+                        {{ manual_recipe_form.publisher.errors }}
+                        {{ manual_recipe_form.publisher }}
+                    </div>
+                    <div>
+                        <label for="id_estimatedCost">Estimated Cost:</label>
+                        {{ manual_recipe_form.estimatedCost.errors }}
+                        {{ manual_recipe_form.estimatedCost }}
+                    </div>
+                    <div>
+                        <label for="id_prepTime">Prep Time:</label>
+                        {{ manual_recipe_form.prepTime.errors }}
+                        {{ manual_recipe_form.prepTime }}
+                    </div>
+                    <div>
+                        <label for="id_totalTime">Total Time:</label>
+                        {{ manual_recipe_form.totalTime.errors }}
+                        {{ manual_recipe_form.totalTime }}
+                    </div>
+                    <div>
+                        <label for="id_cookTime">Cook Time:</label>
+                        {{ manual_recipe_form.cookTime.errors }}
+                        {{ manual_recipe_form.cookTime }}
+                    </div>
+                    <div>
+                        <label for="id_cookMethod">Cooking Method:</label>
+                        {{ manual_recipe_form.cookMethod.errors }}
+                        {{ manual_recipe_form.cookMethod }}
+                    </div>
+                    <div>
+                        <label for="id_recipeCategory">Category:</label>
+                        {{ manual_recipe_form.recipeCategory.errors }}
+                        {{ manual_recipe_form.recipeCategory }}
+                    </div>
+                    <div>
+                        <label for="id_recipeCuisine">Cuisine:</label>
+                        {{ manual_recipe_form.recipeCuisine.errors }}
+                        {{ manual_recipe_form.recipeCuisine }}
+                    </div>
+                    <div>
+                        <label for="id_recipeIngredient">Ingredients:</label>
+                        {{ manual_recipe_form.recipeIngredient.errors }}
+                        {{ manual_recipe_form.recipeIngredient }}
+                    </div>
+                    <div>
+                        <label for="id_recipeInstructions">Instructions:</label>
+                        {{ manual_recipe_form.recipeInstructions.errors }}
+                        {{ manual_recipe_form.recipeInstructions }}
+                    </div>
+                    <div>
+                        <label for="id_suitableForDiet">Diet Types:</label>
+                        {{ manual_recipe_form.suitableForDiet.errors }}
+                        {{ manual_recipe_form.suitableForDiet }}
+                    </div>
+                    <div>
+                        <label for="id_dateSaved">Date Saved:</label>
+                        {{ manual_recipe_form.dateSaved.errors }}
+                        {{ manual_recipe_form.dateSaved }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

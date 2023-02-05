@@ -10,7 +10,7 @@ import json
 
 from scrape_schema_recipe import scrape_url
 
-from .models import Recipe, NutritionalInfo, Keyword
+from .models import Recipe, NutritionalInfo, Keyword, AddRecipeManual
 from .forms import AddRecipeForm, SearchForm
 
 def index(request):
@@ -349,6 +349,20 @@ def addRecipe(request):
     else:
         form = AddRecipeForm()
     return render(request, 'viewer/addRecipe.html', {'form' : form})
+
+def addRecipeManual(request):
+    if request.method == "POST":
+        print(request.POST)
+        form = AddRecipeManual(request.POST)
+
+        if form.is_valid():
+            return HttpResponseRedirect('success')
+    else:
+        form = AddRecipeManual()
+        context = {
+            'manual_recipe_form' : form
+        }
+        return render(request, 'viewer/addRecipeManual.html', context)
 
 def failedAdd(request):
     context = {}
