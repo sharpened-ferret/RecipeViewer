@@ -1,11 +1,12 @@
 import viewer
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.utils import timezone
 from django.db.models import Q
 from datetime import date
 from dateutil.parser import parse
+from django.core.serializers import serialize
 import json
 
 from scrape_schema_recipe import scrape_url
@@ -448,3 +449,16 @@ def search(request):
         searchForm = SearchForm()
 
     return render(request, 'viewer/search.html', {'searchForm' : searchForm})
+
+def export(request):
+    recipes = Recipe.objects.all()
+    nutritions = NutritionalInfo.objects.all()
+    keywords = Keyword.objects.all()
+
+    json_return = {
+        'Data_version' : 'alpha-0.01',
+        'Recipes' : serialize("json", recipes),
+        'Nutritions' : serialize("json", nutritions),
+        'Keywords' : serialize("json", keywords)
+    }
+    return JsonResponse(json_return)

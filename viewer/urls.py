@@ -10,4 +10,5 @@ urlpatterns = [
     path('add-recipe/failed', views.failedAdd, name='add-recipe-failed'),
     path('add-recipe/success', views.successAdd, name='add-recipe-success'),
     path('search', views.search, name='search'),
+    path('export', views.export, name='export'),
 ]
