@@ -14,10 +14,13 @@ from scrape_schema_recipe import scrape_url
 from .models import Recipe, NutritionalInfo, Keyword, AddRecipeManual
 from .forms import AddRecipeForm, SearchForm
 
+# App homepage
 def index(request):
     context = {}
     return render(request, 'viewer/index.html', context)
 
+# Displays a stored recipe to the user
+# Takes an integer recipe ID to select which recipe to display
 def recipe(request, recipe_id):
     recipe = Recipe.objects.filter(id = recipe_id).first()
 
@@ -85,6 +88,7 @@ def recipe(request, recipe_id):
     else:
         return render(request, 'viewer/viewRecipe.html', context)
 
+# Allows users to add recipes via a URL to a page containing a recipe Schema
 def addRecipe(request):
     
     if request.method == 'POST':
@@ -351,6 +355,8 @@ def addRecipe(request):
         form = AddRecipeForm()
     return render(request, 'viewer/addRecipe.html', {'form' : form})
 
+# WIP
+# Allows users to manually submit recipes by entering the relevant form data
 def addRecipeManual(request):
     if request.method == "POST":
         print(request.POST)
@@ -365,14 +371,18 @@ def addRecipeManual(request):
         }
         return render(request, 'viewer/addRecipeManual.html', context)
 
+# Served when a submitted recipe fails to upload to the database.
+# Usually this is when no valid recipe schema could be found on the page.
 def failedAdd(request):
     context = {}
     return render(request, 'viewer/failedAdd.html', context)
 
+# Displayed one successful submission of a new recipe
 def successAdd(request):
     context = {}
     return render(request, 'viewer/successAdd.html', context)
 
+# Search page for stored recipes
 def search(request):
     if request.method == 'POST':
         searchForm = SearchForm(request.POST)
@@ -450,6 +460,8 @@ def search(request):
 
     return render(request, 'viewer/search.html', {'searchForm' : searchForm})
 
+# Serves a Json file, containing all recipes, nutritional data, and keywords in the database
+# Intended for backups / major version switches / export to other applications
 def export(request):
     recipes = Recipe.objects.all()
     nutritions = NutritionalInfo.objects.all()
