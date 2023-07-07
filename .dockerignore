@@ -1,0 +1,4 @@
+Dockerfile
+docker-compose.yml
+db.sqlite3
+./viewer/static
