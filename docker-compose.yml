@@ -6,7 +6,7 @@ services:
     container_name: recipe_viewer
     restart: unless-stopped
     ports:
-      - "${PORT}:8000"
+      - "${PORT}:80"
     volumes:
       - ./db.sqlite3:/APP/db.sqlite3
       - ./viewer/static/:/APP/viewer/static
