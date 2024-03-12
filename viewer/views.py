@@ -194,6 +194,11 @@ def addRecipe(request):
                     if '@type' in recipe['recipeInstructions'][0]:
                         if recipe['recipeInstructions'][0]['@type'] == 'HowToSection':
                             instructionList = recipe['recipeInstructions'][0]['itemListElement']
+                        elif recipe['recipeInstructions'][0]['@type'] == 'HowToStep':
+                            instructionList = list()
+                            for step in recipe['recipeInstructions']:
+                                if step['@type'] == 'HowToStep':
+                                    instructionList.append(step)
                         else:
                             instructionList = recipe['recipeInstructions']
                         outputText = "<ol id='instructions-list'>"
