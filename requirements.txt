@@ -1,5 +1,5 @@
-Django==5.1.4
+Django==5.2.8
 python-dateutil==2.9.0
 scrape-schema-recipe==0.2.2
 gunicorn>=22.0.0
-lxml==5.1.0
+lxml==6.0.2
