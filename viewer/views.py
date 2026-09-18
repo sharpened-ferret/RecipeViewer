@@ -4,8 +4,6 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.utils import timezone
 from django.db.models import Q
-from datetime import date
-from dateutil.parser import parse
 from django.core.serializers import serialize
 import json
 
@@ -118,6 +116,7 @@ def addRecipe(request):
                 r = Recipe(
                     webAddress = recipe.get("canonical_url"),
                     name = recipe.get("title"),
+                    author = recipe.get("author", "Unknown"),
                     description = recipe.get("description"),
                     image = recipe.get("image"),
                     publisher = recipe.get("site_name"),
@@ -129,7 +128,7 @@ def addRecipe(request):
                     recipeCuisine = recipe.get("cuisine"),
                     recipeIngredient = json.dumps(scraper.ingredients()),
                     recipeInstructions = json.dumps(scraper.instructions_list()),
-                    suitableForDiet = json.dumps(recipe.get("dietary_restrictions")),
+                    suitableForDiet = json.dumps(recipe.get("dietary_restrictions", [])),
                     dateSaved = timezone.now()
                 )
                 r.save()

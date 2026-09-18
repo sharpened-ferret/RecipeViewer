@@ -9,7 +9,6 @@ Python (3.7 or higher)
 Django
 
 ## Required Libraries
-[python-dateutil](https://dateutil.readthedocs.io/en/stable/)  
 [recipe-scrapers](https://pypi.org/project/recipe-scrapers/)
 [selenium](https://pypi.org/project/selenium/)
 [geckodriver](https://github.com/mozilla/geckodriver)
@@ -19,8 +18,8 @@ Django
 1. Make sure you have Python & Django installed.  
 2. Use the package manager to install the required libraries.
 ```bash
-pip install python-dateutil  
-pip install scrape-schema-recipe
+pip install recipe-scrapers
+pip install selenium
 ```  
 3. Download the latest release archive and uncompress it where you want it.
 4. To start the server on your LAN, navigate to the root directory of the uncompressed archive and run:
