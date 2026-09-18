@@ -9,7 +9,8 @@ from dateutil.parser import parse
 from django.core.serializers import serialize
 import json
 
-from scrape_schema_recipe import scrape_url
+from recipe_scrapers import scrape_html, NoSchemaFoundInWildMode
+from viewer.utils import backupScraper
 
 from .models import Recipe, NutritionalInfo, Keyword, AddRecipeManual
 from .forms import AddRecipeForm, SearchForm
@@ -47,15 +48,21 @@ def recipe(request, recipe_id):
     else:
         totalTime = recipe.totalTime
 
+    diet_type = json.loads(recipe.suitableForDiet)
+    instructions = "<ol id='instructions-list'>"
+    for step in json.loads(recipe.recipeInstructions):
+        instructions += "<li>" + step + "</li>"
+    instructions += "</ol>"
+
     context = {
         'name' : recipe.name,
-        'image_url' : recipe.image, 
+        'image_url' : recipe.image,
         'description' : recipe.description,
         'ingredients_list' : ingredients_list,
-        'instructions_list' : recipe.recipeInstructions,
+        'instructions_list' : instructions,
         'recipe_category' : recipe.recipeCategory,
         'recipe_cuisine' : recipe.recipeCuisine,
-        'diet_type' : recipe.suitableForDiet,
+        'diet_type' : ' '.join(diet_type),
         'estimated_cost' : estimatedCost,
         'author' : recipe.author,
         'publisher' : recipe.publisher,
@@ -88,272 +95,75 @@ def recipe(request, recipe_id):
     else:
         return render(request, 'viewer/viewRecipe.html', context)
 
-# Allows users to add recipes via a URL to a page containing a recipe Schema
+# Allows users to add recipes via a URL to a page containing a recipe Schema or HTML recipes from compatible websites
+# Compatibility list is available at https://docs.recipe-scrapers.com/getting-started/supported-sites/
 def addRecipe(request):
-    
     if request.method == 'POST':
         form = AddRecipeForm(request.POST)
-        
         if form.is_valid():
             url = form.cleaned_data['url']
             print("URL Recieved: " + url)
 
-            recipe_list = scrape_url(url, python_objects=True)
+            # TODO: Configure when to use request vs browser to fetch recipes
+            # response = requests.get(url)
+            # html = response.text
+            html = backupScraper(url)
+            # if response.status_code == 403:
+            #     html = backupScraper(url)
 
-            # Warning: The following code has a painful number of if/else statements. I kinda hate it tbh.
-            # Unfortunately different sites have a habit of leaving out different schema sections. 
-            # Hopefully I'll think of a better way of doing this in the future.
-            if len(recipe_list) > 0:
-                recipe = recipe_list[0]
-                
-                 # From Thing schema
-                webAddress = recipe['url']
-                name = recipe['name']
-                description = recipe['description']
+            try:
+                scraper = scrape_html(html, org_url=url, supported_only=False)
+                recipe = scraper.to_json()
 
-                if 'url' in recipe['image']:
-                    image = recipe['image']['url']
-                else:
-                    image = recipe['image'][0]
-                
-                 # From Creative Work schema
-                if isinstance(recipe['author'], list):
-                    if 'name' in recipe['author'][0]:
-                        author = recipe['author'][0]['name']
-                    
-                    else:
-                        author = recipe['author'][0]
-                else:
-                    if isinstance(recipe['author'], str):
-                        author = recipe['author']
-                    elif 'name' in recipe['author']:
-                        author = recipe['author']['name']
-                    else:
-                        author = 'UNKNOWN'
-                if 'datePublished' in recipe:
-                    if isinstance(recipe['datePublished'], str):
-                        datePublished = parse(recipe['datePublished'])
-                    elif isinstance(recipe['datePublished'], date):
-                        datePublished = recipe['datePublished']
-                    else:
-                        datePublished = recipe['datePublished'].date()
-                else:
-                    datePublished = None
-                if 'publisher' in recipe:
-                    if 'name' in recipe['publisher']:
-                        publisher = recipe['publisher']['name']
-                    else:
-                        publisher = recipe['publisher']
-                else:
-                    publisher = None
-
-                 # From How To schema
-                if 'estimatedCost' in recipe:
-                    estimatedCost = recipe['estimatedCost']
-                else:
-                    estimatedCost = None
-                if 'prepTime' in recipe:
-                    prepTime = recipe['prepTime']
-                else:
-                    prepTime = None
-                if 'totalTime' in recipe:
-                    totalTime = recipe['totalTime']
-                else:
-                    totalTime = None
-
-
-                 # From Recipe schema
-                if 'cookTime' in recipe:
-                    cookTime = recipe['cookTime']
-                else:
-                    cookTime = None
-
-                if 'cookingMethod' in recipe:
-                    cookingMethod = recipe['cookingMethod']
-                else:
-                    cookingMethod = None
-
-                if 'nutrition' in recipe:
-                    nutrition = recipe['nutrition']
-                else:
-                    nutrition = None
-
-                if 'recipeCategory' in recipe:
-                    recipeCategory = recipe['recipeCategory']
-                else:
-                    recipeCategory = None
-
-                if 'recipeCuisine' in recipe:
-                    recipeCuisine = recipe['recipeCuisine']
-                else:
-                    recipeCuisine = None
-
-                recipeIngredient = json.dumps(recipe['recipeIngredient'])
-
-                if isinstance(recipe['recipeInstructions'], list):
-                    if '@type' in recipe['recipeInstructions'][0]:
-                        if recipe['recipeInstructions'][0]['@type'] == 'HowToSection':
-                            instructionList = recipe['recipeInstructions'][0]['itemListElement']
-                        elif recipe['recipeInstructions'][0]['@type'] == 'HowToStep':
-                            instructionList = list()
-                            for step in recipe['recipeInstructions']:
-                                if step['@type'] == 'HowToStep':
-                                    instructionList.append(step)
-                        else:
-                            instructionList = recipe['recipeInstructions']
-                        outputText = "<ol id='instructions-list'>"
-                        for x in range(0, len(instructionList)):
-                            currentStep = x
-                            outputText += "<li>" + instructionList[x]['text'] + "</li>"
-                        outputText += "</ol>"
-                        recipeInstructions = outputText
-                    elif len(recipe['recipeInstructions']) > 1:
-                        outputText = "<ol id='instructions-list'>"
-                        for howToStep in recipe['recipeInstructions']:
-                            outputText += "<li>" + howToStep + "</li>"
-                        outputText += "</ol>"
-                        recipeInstructions = outputText
-                    else:
-                        recipeInstructions = "<p>" + recipe['recipeInstructions'][0] + "</p>"
-                else:
-                    recipeInstructions = recipe['recipeInstructions']
-
-                if 'suitableForDiet' in recipe:
-                    suitableForDiet = recipe['suitableForDiet']
-                else:
-                    suitableForDiet = None
-
-                dateSaved = timezone.now()
-
-
-                # Saves creates new recipe object in DB
                 r = Recipe(
-                    webAddress = webAddress,
-                    name = name,
-                    description = description,
-                    image = image,
-                    author = author,
-                    datePublished = datePublished,
-                    publisher = publisher,
-                    estimatedCost = estimatedCost,
-                    prepTime = prepTime,
-                    totalTime = totalTime,
-                    cookTime = cookTime,
-                    cookingMethod = cookingMethod,
-                    recipeCategory = recipeCategory,
-                    recipeCuisine = recipeCuisine,
-                    recipeIngredient = recipeIngredient,
-                    recipeInstructions = recipeInstructions,
-                    suitableForDiet = suitableForDiet,
-                    dateSaved = dateSaved
+                    webAddress = recipe.get("canonical_url"),
+                    name = recipe.get("title"),
+                    description = recipe.get("description"),
+                    image = recipe.get("image"),
+                    publisher = recipe.get("site_name"),
+                    prepTime = timezone.timedelta(minutes=scraper.prep_time()),
+                    totalTime = timezone.timedelta(minutes=scraper.total_time()),
+                    cookTime = timezone.timedelta(minutes=scraper.cook_time()),
+                    cookingMethod = recipe.get("cooking_method"),
+                    recipeCategory = recipe.get("category"),
+                    recipeCuisine = recipe.get("cuisine"),
+                    recipeIngredient = json.dumps(scraper.ingredients()),
+                    recipeInstructions = json.dumps(scraper.instructions_list()),
+                    suitableForDiet = json.dumps(recipe.get("dietary_restrictions")),
+                    dateSaved = timezone.now()
                 )
                 r.save()
 
+                keywords = recipe.get("keywords")
+                if keywords is not None:
+                    for word in keywords:
+                        k = Keyword(
+                            recipe = r,
+                            keyword = word.lower()
+                        )
+                        k.save()
 
-                # Keywords Handling
-                if 'keywords' in recipe:
-                    keywords = []
-
-                    if isinstance(recipe['keywords'], str):
-                        keywords = recipe['keywords'].split(", ")
-                    elif isinstance(recipe['keywords'], list):
-                        keywords = recipe['keywords']
-
-                    if len(keywords) > 0:
-                        for word in keywords:
-                            k = Keyword(
-                                    recipe = r, 
-                                    keyword = word.lower()
-                                )
-                            k.save()
-                    
-
-
-                # Nutritional Info Handling (Where exists)
-                if 'nutrition' in recipe:
-                    if 'calories' in recipe['nutrition']:
-                        calories = recipe['nutrition']['calories']
-                    else:
-                        calories = ""
-
-                    if 'carbohydrateContent' in recipe['nutrition']:
-                        carbohydrateContent = recipe['nutrition']['carbohydrateContent']
-                    else:
-                        carbohydrateContent = ""
-
-                    if 'cholesterolContent' in recipe['nutrition']:
-                        cholesterolContent = recipe['nutrition']['cholesterolContent']
-                    else:
-                        cholesterolContent = ""
-
-                    if 'fatContent' in recipe['nutrition']:
-                        fatContent = recipe['nutrition']['fatContent']
-                    else:
-                        fatContent = ""
-
-                    if 'fiberContent' in recipe['nutrition']:
-                        fiberContent = recipe['nutrition']['fiberContent']
-                    else:
-                        fiberContent = ""
-
-                    if 'proteinContent' in recipe['nutrition']:
-                        proteinContent = recipe['nutrition']['proteinContent']
-                    else:
-                        proteinContent = ""
-
-                    if 'saturatedFatContent' in recipe['nutrition']:
-                        saturatedFatContent = recipe['nutrition']['saturatedFatContent']
-                    else:
-                        saturatedFatContent = ""
-
-                    if 'servingSize' in recipe['nutrition']:
-                        servingSize = recipe['nutrition']['servingSize']
-                    else:
-                        servingSize = ""
-
-                    if 'sodiumContent' in recipe['nutrition']:
-                        sodiumContent = recipe['nutrition']['sodiumContent']
-                    else:
-                        sodiumContent = ""
-
-                    if 'sugarContent' in recipe['nutrition']:
-                        sugarContent = recipe['nutrition']['sugarContent']
-                    else:
-                        sugarContent = ""
-
-                    if 'transFatContent' in recipe['nutrition']:
-                        transFatContent = recipe['nutrition']['transFatContent']
-                    else:
-                        transFatContent = ""
-
-                    if 'unsaturatedFatContent' in recipe['nutrition']:
-                        unsaturatedFatContent = recipe['nutrition']['unsaturatedFatContent']
-                    else:
-                        unsaturatedFatContent = ""
-                    
-                    
-                    # Creates nutritional info object in DB
+                nutrients = recipe.get("nutrients")
+                if nutrients is not None:
                     n = NutritionalInfo(
-                        calories = calories,
-                        carbohydrateContent = carbohydrateContent,
-                        cholesterolContent = cholesterolContent,
-                        fatContent = fatContent,
-                        fiberContent = fiberContent,
-                        proteinContent = proteinContent,
-                        saturatedFatContent = saturatedFatContent,
-                        servingSize = servingSize,
-                        sodiumContent = sodiumContent,
-                        sugarContent = sugarContent,
-                        transFatContent = transFatContent,
-                        unsaturatedFatContent = unsaturatedFatContent,
-                        recipe = r
+                        recipe = r,
+                        calories = nutrients.get("calories"),
+                        carbohydrateContent = nutrients.get("carbohydrateContent"),
+                        cholesterolContent = nutrients.get("cholesterolContent"),
+                        fatContent = nutrients.get("fatContent"),
+                        fiberContent = nutrients.get("fiberContent"),
+                        proteinContent = nutrients.get("proteinContent"),
+                        saturatedFatContent = nutrients.get("saturatedFatContent"),
+                        servingSize = nutrients.get("servingSize"),
+                        sodiumContent = nutrients.get("sodiumContent"),
+                        sugarContent = nutrients.get("sugarContent"),
+                        transFatContent = nutrients.get("transFatContent"),
+                        unsaturatedFatContent = nutrients.get("unsaturatedFatContent")
                     )
                     n.save()
-
-
-                    print("Success")
                 return HttpResponseRedirect('success')
-            else:
+            # Fallback for if the page contains no valid schema
+            except NoSchemaFoundInWildMode:
                 print("No compatible recipes found")
                 return HttpResponseRedirect('failed')
     else:
@@ -454,7 +264,7 @@ def search(request):
 
             if len(existingResults) == 0:
                 results = "<h2>No recipes found.</h2>"
-            
+
             return render(request, 'viewer/searchResults.html', {'searchForm' : searchForm, 'search_results' : results})
 
 

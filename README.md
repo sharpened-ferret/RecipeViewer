@@ -10,7 +10,9 @@ Django
 
 ## Required Libraries
 [python-dateutil](https://dateutil.readthedocs.io/en/stable/)  
-[scrape-schema-recipe](https://pypi.org/project/scrape-schema-recipe/)
+[recipe-scrapers](https://pypi.org/project/recipe-scrapers/)
+[selenium](https://pypi.org/project/selenium/)
+[geckodriver](https://github.com/mozilla/geckodriver)
 
   
 ## Installation & Setup
