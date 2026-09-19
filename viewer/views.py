@@ -103,15 +103,25 @@ def addRecipe(request):
             print("URL Recieved: " + url)
 
             # TODO: Configure when to use request vs browser to fetch recipes
-            # response = requests.get(url)
-            # html = response.text
-            html = backupScraper(url)
-            # if response.status_code == 403:
-            #     html = backupScraper(url)
+            response = request.get(url)
+            html = response.text
+            # html = backupScraper(url)
+            if response.status_code == 403:
+                html = backupScraper(url)
 
             try:
                 scraper = scrape_html(html, org_url=url, supported_only=False)
                 recipe = scraper.to_json()
+
+                prepTime = None
+                if recipe.get("prep_time") is not None:
+                    prepTime = timezone.timedelta(minutes=scraper.prep_time())
+                totalTime = None
+                if recipe.get("total_time") is not None:
+                    totalTime = timezone.timedelta(minutes=scraper.total_time())
+                cookTime = None
+                if recipe.get("cook_time") is not None:
+                    cookTime = timezone.timedelta(minutes=scraper.cook_time())
 
                 r = Recipe(
                     webAddress = recipe.get("canonical_url"),
@@ -120,15 +130,17 @@ def addRecipe(request):
                     description = recipe.get("description"),
                     image = recipe.get("image"),
                     publisher = recipe.get("site_name"),
-                    prepTime = timezone.timedelta(minutes=scraper.prep_time()),
-                    totalTime = timezone.timedelta(minutes=scraper.total_time()),
-                    cookTime = timezone.timedelta(minutes=scraper.cook_time()),
+                    prepTime = prepTime,
+                    totalTime = totalTime,
+                    cookTime = cookTime,
                     cookingMethod = recipe.get("cooking_method"),
                     recipeCategory = recipe.get("category"),
                     recipeCuisine = recipe.get("cuisine"),
                     recipeIngredient = json.dumps(scraper.ingredients()),
                     recipeInstructions = json.dumps(scraper.instructions_list()),
-                    suitableForDiet = json.dumps(recipe.get("dietary_restrictions", [])),
+                    suitableForDiet = json.dumps(
+                        recipe.get("dietary_restrictions", [])
+                    ),
                     dateSaved = timezone.now()
                 )
                 r.save()
