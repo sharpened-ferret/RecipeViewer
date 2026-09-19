@@ -1,17 +1,16 @@
-import viewer
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.template import loader
-from django.utils import timezone
-from django.db.models import Q
-from django.core.serializers import serialize
 import json
 
-from recipe_scrapers import scrape_html, NoSchemaFoundInWildMode
+from django.core.serializers import serialize
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
+from django.utils import timezone
+from recipe_scrapers import NoSchemaFoundInWildMode, scrape_html
+
 from viewer.utils import backupScraper
 
-from .models import Recipe, NutritionalInfo, Keyword, AddRecipeManual
 from .forms import AddRecipeForm, SearchForm
+from .models import AddRecipeManual, Keyword, NutritionalInfo, Recipe
+
 
 # App homepage
 def index(request):

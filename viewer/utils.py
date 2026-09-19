@@ -1,5 +1,6 @@
 from selenium import webdriver
 
+
 # Backup scraper for sites that require JavaScript to load
 def backupScraper(url):
     driver = webdriver.Firefox()

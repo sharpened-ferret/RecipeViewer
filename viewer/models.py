@@ -1,12 +1,13 @@
 from django.db import models
 from django.forms import ModelForm
 
+
 # Defines a recipe data model
 # based on https://schema.org/Recipe
 class Recipe(models.Model):
     def __str__(self):
         return self.name
-    
+
      # From Thing schema
      # https://schema.org/Thing
     webAddress = models.URLField()
@@ -43,7 +44,7 @@ class AddRecipeManual(ModelForm):
     class Meta:
         model = Recipe
         fields = '__all__'
-        
+
 
 # Describes a recipe's nutritional information
 # based on https://schema.org/NutritionInformation
