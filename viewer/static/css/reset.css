@@ -4,6 +4,7 @@
 }
 
 body {
+  font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
 }
 
@@ -19,4 +20,20 @@ input, button, textarea, select {
 /* avoid overflows */
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
+}
+
+/* light mode */
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: white;
+        color: black;
+    }
+}
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
 }
