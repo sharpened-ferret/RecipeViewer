@@ -141,7 +141,7 @@ def failedAdd(request):
     context = {}
     return render(request, 'viewer/failedAdd.html', context)
 
-# Displayed one successful submission of a new recipe
+# Displayed on successful submission of a new recipe
 def successAdd(request):
     context = {}
     return render(request, 'viewer/successAdd.html', context)
