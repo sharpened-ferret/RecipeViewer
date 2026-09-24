@@ -1,3 +1,13 @@
+:root {
+    --light-pastel-pink: #F88;
+    --pastel-pink: #FAA;
+    --dark-pastel-pink: #FCC;
+
+    --primary-colour: var(--pastel-pink);
+    --light-accent: var(--light-pastel-pink);
+    --dark-accent: var(--dark-pastel-pink);
+}
+
 #container {
     max-width: 1200px;
     min-width: 300px;
@@ -31,9 +41,9 @@
     width: 140px;
     padding: 4px;
     color: black;
-    background-color: #FAA;
+    background-color: var(--primary-colour);
     border: 4px solid;
-    border-color: #FCC #F88 #F88 #FCC;
+    border-color: var(--dark-accent) var(--light-accent) var(--light-accent) var(--dark-accent);
     border-radius: 50px;
 }
 
@@ -42,7 +52,7 @@
 }
 
 .nav-button:active {
-    border-color: #F88 #FCC #FCC #F88;
+    border-color: var(--light-accent) var(--dark-accent) var(--dark-accent) var(--light-accent);
 }
 
 .search-button {
