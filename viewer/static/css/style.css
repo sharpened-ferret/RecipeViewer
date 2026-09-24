@@ -73,10 +73,21 @@
     border-color: var(--secondary-dark-accent) var(--secondary-light-accent) var(--secondary-light-accent) var(--secondary-dark-accent);
 }
 
+#form-buttons {
+    display: flex;
+    width: 300px;
+    margin: auto;
+    flex-flow: row;
+    justify-content: space-evenly;
+}
+
+#summary-text {
+    width: 90%;
+    margin: auto;
+}
+
 input[type=text] {
-    width: 93%;
-    width: -moz-available;          /* WebKit-based browsers will ignore this. */
-    width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    min-width: 260px;
     padding-left: 0;
     padding: 1em;
     padding-top: 1em;
@@ -84,9 +95,10 @@ input[type=text] {
 }
 
 input[type=url] {
-    width: 93%;
-    width: -moz-available;          /* WebKit-based browsers will ignore this. */
-    width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    min-width: 300px;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0px auto 10px auto;
     padding-left: 0;
     padding: 1em;
     padding-top: 1em;
