@@ -5,16 +5,16 @@
         <title>Add Recipe - RecipeViewer</title>
     </head>
     <body>
-        <div class="container">
-            <h1 class="heading-text">Add recipe</h1>
-            <div class="add-recipe-form">
-                <p>Submit a recipe's URL to save it to the database.</p>
-                <form method="post" class="url-form">
-                    {% csrf_token %}
-                    {{ form }}
-                    <button type="submit" class="search-button">Submit</button>
-                </form>
-            </div>
+        <div id="container">
+            <h1 class="page-heading">Recipe Viewer</h1>
+            <h2 class="page-heading">Add Recipe</h2>
+            <p>Submit a recipe's URL to save it to the database.</p>
+            <form method="post" class="url-form">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit" class="rv-button primary">SUBMIT</button>
+                <a href="/" class="rv-button secondary">BACK</a>
+            </form>
         </div>
     </body>
 </html>
